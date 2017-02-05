@@ -63,7 +63,12 @@ bot.dialog('/promptButtons', [
     }
 ]);
 
-bot.dialog('/faq', [faqDialog.whatIsYourQuestion, faqDialog.getFAQAnswer]);
+bot.dialog('/faq', [
+    faqDialog.whatIsYourQuestion,
+    faqDialog.getFAQAnswer,
+    faqDialog.checkAnotherQuestion,
+    faqDialog.routeAfterAnotherFAQCheck
+    ]);
 
 bot.dialog('/status', [
     function (session) {
