@@ -28,10 +28,25 @@ var getFAQAnswer =  function (session, results, next) {
             session.replaceDialog('/faq');
         } else {
            session.send(body.answer);
-           session.replaceDialog('/')
+           next();
         }
     });
 }
 
+var checkAnotherQuestion = function(session, results) {
+    var choices = ["Yes", "No"];
+    builder.Prompts.choice(session, "Do you have another FAQ question?", choices)
+};
+
+var routeAfterAnotherFAQCheck = function(session, results) {
+    if (results.response.entity == "Yes") {
+        session.replaceDialog('/faq')
+    } else {
+        session.replaceDialog('/');
+    }
+}
+
 module.exports.whatIsYourQuestion = whatIsYourQuestion;
 module.exports.getFAQAnswer = getFAQAnswer;
+module.exports.checkAnotherQuestion = checkAnotherQuestion;
+module.exports.routeAfterAnotherFAQCheck = routeAfterAnotherFAQCheck;

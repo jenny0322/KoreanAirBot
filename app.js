@@ -3,6 +3,7 @@ var builder = require('botbuilder');
 var request = require("request");
 var faqDialog = require('./dialogs/faq');
 var statusDialog = require('./dialogs/status');
+var promptDialog = require('./dialogs/prompts');
 require('dotenv').config()
  
 //=========================================================
@@ -37,33 +38,17 @@ bot.dialog('/', [
 ]);
 
 bot.dialog('/promptButtons', [
-    function (session) {
-        var choices = [
-            "Korean Air FAQ", 
-            "Check Flight Status",
-            "Quit"
-           ]
-        builder.Prompts.choice(session, "How can we help you today?", choices);
-    },
-    function (session, results) {
-        if (results.response) {
-            var selection = results.response.entity;
-            // route to corresponding dialogs
-            switch (selection) {
-                case "Korean Air FAQ":
-                    session.replaceDialog('/faq');
-                    break;
-                case "Check Flight Status":
-                    session.replaceDialog('/status');
-                    break;
-                default:
-                    session.endDialog();
-                    break;
-            }
-        }
-    }
+    promptDialog.presentPromptChoices,
+    promptDialog.routePromptChoices
 ]);
 
-bot.dialog('/faq', [faqDialog.whatIsYourQuestion, faqDialog.getFAQAnswer]);
-bot.dialog('/status', [statusDialog.askFlightNumber, statusDialog.getFlightStatus]);
+
+bot.dialog('/faq', [
+    faqDialog.whatIsYourQuestion,
+    faqDialog.getFAQAnswer,
+    faqDialog.checkAnotherQuestion,
+    faqDialog.routeAfterAnotherFAQCheck
+]);
+bot.dialog('/status', [statusDialog.askFlightNumber, statusDialog.getFlightStatus, statusDialog.askFlightFligtStatusAgain,statusDialog.redirectPrompt]);
+
 
