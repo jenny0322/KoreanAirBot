@@ -4,6 +4,7 @@ var request = require("request");
 var faqDialog = require('./dialogs/faq');
 var statusDialog = require('./dialogs/status');
 var promptDialog = require('./dialogs/prompts');
+var agentDialog = require('./dialogs/agent');
 require('dotenv').config()
  
 //=========================================================
@@ -51,4 +52,5 @@ bot.dialog('/faq', [
 ]);
 bot.dialog('/status', [statusDialog.askFlightNumber, statusDialog.getFlightStatus, statusDialog.askFlightFligtStatusAgain,statusDialog.redirectPrompt]);
 
+bot.dialog('/agent', [agentDialog.contactAnAgent]);
 

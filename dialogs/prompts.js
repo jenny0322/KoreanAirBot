@@ -5,6 +5,7 @@ var presentPromptChoices = function (session) {
     var choices = [
         "Korean Air FAQ", 
         "Check Flight Status",
+        "Request an Agent",
         "Quit"
         ]
     builder.Prompts.choice(session, "How can we help you today?", choices);
@@ -20,6 +21,9 @@ var routePromptChoices = function (session, results) {
                 break;
             case "Check Flight Status":
                 session.replaceDialog('/status');
+                break;
+            case "Request an Agent":
+                session.replaceDialog('/agent');
                 break;
             default:
                 session.endDialog();
