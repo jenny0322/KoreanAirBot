@@ -1,7 +1,5 @@
 var restify = require('restify');
 var builder = require('botbuilder');
-var https = require('https');
-var querystring = require('querystring');
 var request = require("request");
 require('dotenv').config()
  
@@ -29,7 +27,10 @@ server.post('/api/messages', connector.listen());
 
 bot.dialog('/', [
     function (session) {
-        session.replaceDialog('/promptButtons');
+        session.beginDialog('/promptButtons');
+    },
+    function(session, results) {
+        session.endConversation('Thanks for allowing me to help you. Take care :)!');
     }
 ]);
 
@@ -37,7 +38,8 @@ bot.dialog('/promptButtons', [
     function (session) {
         var choices = [
             "Korean Air FAQ", 
-            "Flight Status"
+            "Check Flight Status",
+            "Quit"
            ]
         builder.Prompts.choice(session, "How can we help you today?", choices);
     },
@@ -49,11 +51,11 @@ bot.dialog('/promptButtons', [
                 case "Korean Air FAQ":
                     session.replaceDialog('/faq');
                     break;
-                case "Flight Status":
+                case "Check Flight Status":
                     session.replaceDialog('/status');
                     break;
                 default:
-                    session.reset('/');
+                    session.endDialog();
                     break;
             }
         }
@@ -82,10 +84,20 @@ bot.dialog('/faq', [
         };
 
         request(options, function (error, response, body) {
-            if (error) throw new Error(error);
-                session.send(body.answer);
-                next();
-            }); 
+            if (error) {
+                session.send("I had a hard time finding an answer to that question.  Let's try again.")
+                session.replaceDialog('/faq');
+            } else {
+                if (body.answer == "No good match found in the KB" || "Hmm, you might want to read about that here: raw.githubusercontent.com") {
+                    // try searching on bing for an answer.
+                    console.log(body.answer);
+                    session.send("Going to try searching on bing...");
+                } else {
+                    session.send(body.answer);
+                    next();
+                }
+            }
+        }); 
     },
     function(session, results) {
         var choices = ["Yes", "No"];
@@ -95,8 +107,10 @@ bot.dialog('/faq', [
         var selection = results.response.entity;
         if (selection == "Yes") {
             session.replaceDialog('/faq');
-        } else {
+        } else if (selection == "No") {
             next();
+        } else {
+            session.endDialog();
         }
     },
     function(session, results) {
@@ -108,7 +122,7 @@ bot.dialog('/faq', [
         if (selection == "Yes") {
             session.replaceDialog('/status');
         } else {
-            session.replaceDialog('/');
+            session.endDialog();
         }
     }
 ]);
@@ -119,6 +133,6 @@ bot.dialog('/status', [
     },     
    function (session, results) {
         session.send("Your flight will arrive in 30 minutes in DFW.");
-        session.replaceDialog('/');
+        session.endDialog();
     }
 ]);
