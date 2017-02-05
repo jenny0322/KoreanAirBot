@@ -2,6 +2,7 @@ var restify = require('restify');
 var builder = require('botbuilder');
 var request = require("request");
 var faqDialog = require('./dialogs/faq');
+var promptDialog = require('./dialogs/prompts');
 require('dotenv').config()
  
 //=========================================================
@@ -36,31 +37,8 @@ bot.dialog('/', [
 ]);
 
 bot.dialog('/promptButtons', [
-    function (session) {
-        var choices = [
-            "Korean Air FAQ", 
-            "Check Flight Status",
-            "Quit"
-           ]
-        builder.Prompts.choice(session, "How can we help you today?", choices);
-    },
-    function (session, results) {
-        if (results.response) {
-            var selection = results.response.entity;
-            // route to corresponding dialogs
-            switch (selection) {
-                case "Korean Air FAQ":
-                    session.replaceDialog('/faq');
-                    break;
-                case "Check Flight Status":
-                    session.replaceDialog('/status');
-                    break;
-                default:
-                    session.endDialog();
-                    break;
-            }
-        }
-    }
+    promptDialog.presentPromptChoices,
+    promptDialog.routePromptChoices
 ]);
 
 bot.dialog('/faq', [
@@ -68,7 +46,7 @@ bot.dialog('/faq', [
     faqDialog.getFAQAnswer,
     faqDialog.checkAnotherQuestion,
     faqDialog.routeAfterAnotherFAQCheck
-    ]);
+]);
 
 bot.dialog('/status', [
     function (session) {
