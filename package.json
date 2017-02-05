@@ -1,6 +1,13 @@
 {
   "dependencies": {
     "botbuilder": "^3.6.0",
+    "dotenv": "^4.0.0",
     "restify": "^4.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  },
+  "scripts": {
+    "start": "nodemon app.js"
   }
 }
