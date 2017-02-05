@@ -70,7 +70,7 @@ bot.dialog('/status', [
         builder.Prompts.text(session,"What flight number are you interested in?");
     },     
    function (session, results) {
-        session.send("Your flight will arrive in 30 minutes in DFW.");
+        session.send("Click here for that information http://flightaware.com/live/flight/"+ results.response);
         session.endDialog();
     }
 ]);
