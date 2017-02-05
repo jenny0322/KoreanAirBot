@@ -2,6 +2,7 @@ var restify = require('restify');
 var builder = require('botbuilder');
 var request = require("request");
 var faqDialog = require('./dialogs/faq');
+var statusDialog = require('./dialogs/status');
 require('dotenv').config()
  
 //=========================================================
@@ -64,13 +65,5 @@ bot.dialog('/promptButtons', [
 ]);
 
 bot.dialog('/faq', [faqDialog.whatIsYourQuestion, faqDialog.getFAQAnswer]);
+bot.dialog('/status', [statusDialog.askFlightNumber, statusDialog.getFlightStatus]);
 
-bot.dialog('/status', [
-    function (session) {
-        builder.Prompts.text(session,"What flight number are you interested in?");
-    },     
-   function (session, results) {
-        session.send("Click here for that information http://flightaware.com/live/flight/"+ results.response);
-        session.endDialog();
-    }
-]);
