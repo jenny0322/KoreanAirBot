@@ -1,6 +1,7 @@
 var restify = require('restify');
 var builder = require('botbuilder');
 var request = require("request");
+var faqDialog = require('./dialogs/faq');
 require('dotenv').config()
  
 //=========================================================
@@ -62,70 +63,7 @@ bot.dialog('/promptButtons', [
     }
 ]);
 
-bot.dialog('/faq', [
-    function (session) {
-        builder.Prompts.text(session,"What is your question?");
-    },     
-   function (session, results, next) {
-        var options = { 
-            method: 'POST',
-            url: 'https://westus.api.cognitive.microsoft.com/qnamaker/v1.0/knowledgebases/8ee17435-1c29-4945-bbd4-b1d8eefc7957/generateAnswer',
-            headers: 
-            { 
-                'cache-control': 'no-cache',
-                'content-type': 'application/json',
-                'ocp-apim-subscription-key': process.env.QNA_SUBSCRIPTION_KEY 
-            },
-            body: 
-            { 
-                question: results.response 
-            },
-            json: true 
-        };
-
-        request(options, function (error, response, body) {
-            if (error) {
-                session.send("I had a hard time finding an answer to that question.  Let's try again.")
-                session.replaceDialog('/faq');
-            } else {
-                if ((body.answer == "No good match found in the KB") || (body.answer =="Hmm, you might want to read about that here: raw.githubusercontent.com")) {
-                    // try searching on bing for an answer.
-                    console.log(body.answer);
-                    session.send("Going to try searching on bing...");
-                } else {
-                    session.send(body.answer);
-                    next();
-                }
-            }
-        }); 
-    },
-    function(session, results) {
-        var choices = ["Yes", "No"];
-        builder.Prompts.choice(session, "Do you have another FAQ question?", choices)
-    }, 
-    function(session, results, next) {
-        var selection = results.response.entity;
-        if (selection == "Yes") {
-            session.replaceDialog('/faq');
-        } else if (selection == "No") {
-            next();
-        } else {
-            session.endDialog();
-        }
-    },
-    function(session, results) {
-        var choices = ["Yes", "No"];
-        builder.Prompts.choice(session, "Would you like to check your flight status?", choices);
-    },
-    function(session, results, next) {
-        var selection = results.response.entity;
-        if (selection == "Yes") {
-            session.replaceDialog('/status');
-        } else {
-            session.endDialog();
-        }
-    }
-]);
+bot.dialog('/faq', [faqDialog.whatIsYourQuestion, faqDialog.getFAQAnswer]);
 
 bot.dialog('/status', [
     function (session) {
