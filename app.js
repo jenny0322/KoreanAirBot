@@ -64,7 +64,7 @@ bot.dialog('/faq', [
     function (session) {
         builder.Prompts.text(session,"What is your question?");
     },     
-   function (session, results) {
+   function (session, results, next) {
         var options = { 
             method: 'POST',
             url: 'https://westus.api.cognitive.microsoft.com/qnamaker/v1.0/knowledgebases/8ee17435-1c29-4945-bbd4-b1d8eefc7957/generateAnswer',
@@ -84,16 +84,41 @@ bot.dialog('/faq', [
         request(options, function (error, response, body) {
             if (error) throw new Error(error);
                 session.send(body.answer);
-                session.replaceDialog('/');
+                next();
             }); 
+    },
+    function(session, results) {
+        var choices = ["Yes", "No"];
+        builder.Prompts.choice(session, "Do you have another FAQ question?", choices)
+    }, 
+    function(session, results, next) {
+        var selection = results.response.entity;
+        if (selection == "Yes") {
+            session.replaceDialog('/faq');
+        } else {
+            next();
+        }
+    },
+    function(session, results) {
+        var choices = ["Yes", "No"];
+        builder.Prompts.choice(session, "Would you like to check your flight status?", choices);
+    },
+    function(session, results, next) {
+        var selection = results.response.entity;
+        if (selection == "Yes") {
+            session.replaceDialog('/status');
+        } else {
+            session.replaceDialog('/');
+        }
+    }
+]);
 
-  }]);
-
-  bot.dialog('/status', [
+bot.dialog('/status', [
     function (session) {
         builder.Prompts.text(session,"What flight number are you interested in?");
     },     
    function (session, results) {
-        session.send("You flight will arrive in 30 minutes in DFW.");
+        session.send("Your flight will arrive in 30 minutes in DFW.");
         session.replaceDialog('/');
-  }]);
+    }
+]);
