@@ -29,7 +29,7 @@ MVP Usecases
 --------
 1. The system shall provide users with the option to choose they type of help they need (Search FAQ, Search Flight Info, Contact an Agent)
 2. FAQ Search: The user will be promted "How may I help you?" the user will then reply with a question. The system will then parse the question and respond back with its best guess.
-3. Search Flight Info: The user will be promted for there flight number, the system will then do a bing search to find out flight status for that flight and present that to the user. 
+3. Search Flight Info: The user will be promted for there flight number, the system will then provide a url to flight status website. 
 4. Contact an Agent: The user will be provided the 1-800 number to call for help. 
 
 Possible Enhancements
