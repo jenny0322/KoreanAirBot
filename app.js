@@ -3,6 +3,7 @@ var builder = require('botbuilder');
 var request = require("request");
 var faqDialog = require('./dialogs/faq');
 var promptDialog = require('./dialogs/prompts');
+var agentDialog = require('./dialogs/agent');
 require('dotenv').config()
  
 //=========================================================
@@ -57,3 +58,5 @@ bot.dialog('/status', [
         session.endDialog();
     }
 ]);
+
+bot.dialog('/agent', [agentDialog.contactAnAgent]);
