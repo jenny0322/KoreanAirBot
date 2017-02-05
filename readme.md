@@ -21,6 +21,10 @@ Korean Air has a FAQ page here: https://www.koreanair.com/content/koreanair/glob
  
 Ideally the bot would work on different channels, such as Skype but they have also expressed the interest to have this bot embedded on their website. Some execs mentioned they thing it would be even more interesting if such bot used speech, so users could just talk to it. 
 
+Refinements
+-----------
+- Speech Ask: While we belive that speech would be interesting technically, we do not believe that it would fit into the typical use case for the customer. We believe that most users would be accessing this type of information on the go from mobile devices, likey from busy and noisy air ports. This noisy enviroment is not condusive to go text to speech translation. Additionally, we believe that customers would not be confortable talking about possibly sensitive information in this public setting. 
+
 MVP Usecases
 --------
 1. The system shall provide users with the option to choose they type of help they need (Search FAQ, Search Flight Info, Contact an Agent)
