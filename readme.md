@@ -17,7 +17,7 @@ Copyright and License
 
 Scenario
 ----
-Korean Air has a FAQ page here: https://www.koreanair.com/content/koreanair/global/en/customersupport.html#faqs And they would like to build a bot that can answer similar questions (and it wouldn’t hurt if it can be useful in other ways too) 
+Korean Air has a FAQ page here: https://www.koreanair.com/content/koreanair/global/en/customer-support.html#faqs And they would like to build a bot that can answer similar questions (and it wouldn’t hurt if it can be useful in other ways too) 
  
 Ideally the bot would work on different channels, such as Skype but they have also expressed the interest to have this bot embedded on their website. Some execs mentioned they thing it would be even more interesting if such bot used speech, so users could just talk to it. 
 
