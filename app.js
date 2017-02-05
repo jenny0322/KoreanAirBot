@@ -88,7 +88,7 @@ bot.dialog('/faq', [
                 session.send("I had a hard time finding an answer to that question.  Let's try again.")
                 session.replaceDialog('/faq');
             } else {
-                if (body.answer == "No good match found in the KB" || "Hmm, you might want to read about that here: raw.githubusercontent.com") {
+                if ((body.answer == "No good match found in the KB") || (body.answer =="Hmm, you might want to read about that here: raw.githubusercontent.com")) {
                     // try searching on bing for an answer.
                     console.log(body.answer);
                     session.send("Going to try searching on bing...");
